@@ -8,11 +8,17 @@ PREREQUISITES:
 
 DEPLOYMENT STEPS:
 
-  l. Add the helm official repository for Prometheus and Grafana 
+  l. Create the local directory used for persistent volumes on all Kubernetes nodes
 
-    helm repo add stable https://charts.helm.sh/stable
-    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    cd /home/kube
+    mkdir influxdb-files
+    cd influxdb-files
+    mkdir volume-files
     
-  2. Create namespace
+  2. Create the Storage Class and the Persistemt Volume
      
-    kubectl create namespace prometheus
+    kubectl apply -f influxdb-persistent-volume.yaml
+   
+  3. Create the InfluxDB Deployment
+
+    kubectl apply -f influxdb-deployment.yaml
