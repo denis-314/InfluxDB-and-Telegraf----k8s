@@ -26,5 +26,5 @@ DEPLOYMENT STEPS:
   4. Acces InfluxDB web UI on port 30015 in browser
 
 Bibliography:
-https://opensource.com/article/19/2/deploy-influxdb-grafana-kubernetes
-https://medium.com/@nikhil.nagarajappa/installing-influxdb-in-k8s-2fe0e0647431
+  - https://opensource.com/article/19/2/deploy-influxdb-grafana-kubernetes
+  - https://medium.com/@nikhil.nagarajappa/installing-influxdb-in-k8s-2fe0e0647431
