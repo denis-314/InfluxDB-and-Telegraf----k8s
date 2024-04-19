@@ -1,10 +1,10 @@
-Follow the below steps to deploy Prometheus and Grafana Apps in Kubernetes using Helm charts.
+Follow the below steps to deploy InfluxDB in Kubernetes using Helm charts and link it with Grafana.
 
 PREREQUISITES:
 
     l. Kubernetes Cluster
-    2. Helm chart
-    3. Open communication on ports 30007, 30008 and 30009 on the Router (or other ports, but they need to be changed in the serice).
+    2. Copy the above YAML file on a local directory
+    2. Open communication on ports 30015 on the Router (or other ports, but they need to be changed in the serice).
 
 DEPLOYMENT STEPS:
 
