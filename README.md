@@ -22,3 +22,5 @@ DEPLOYMENT STEPS:
   3. Create the InfluxDB Deployment
 
     kubectl apply -f influxdb-deployment.yaml
+
+  4. Acces InfluxDB web UI on port 30015 in browser
