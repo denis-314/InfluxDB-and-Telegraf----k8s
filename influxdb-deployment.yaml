@@ -1,3 +1,11 @@
+# Namespace
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: influxdb-ns
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
