@@ -25,6 +25,11 @@ DEPLOYMENT STEPS -- INFLUXDB --
 
   4. Acces InfluxDB web UI on port 30015 in browser
 
+Bibliography:
+  - https://opensource.com/article/19/2/deploy-influxdb-grafana-kubernetes
+  - https://medium.com/@nikhil.nagarajappa/installing-influxdb-in-k8s-2fe0e0647431
+
+_____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
 DEPLOYMENT STEPS -- TELEGRAF --
 
@@ -37,7 +42,9 @@ DEPLOYMENT STEPS -- TELEGRAF --
   2. Create the Telegraf Deployment
      
     kubectl apply -f telegraf_deployment_all.yaml
-
-Bibliography:
-  - https://opensource.com/article/19/2/deploy-influxdb-grafana-kubernetes
-  - https://medium.com/@nikhil.nagarajappa/installing-influxdb-in-k8s-2fe0e0647431
+  
+  3. For vSphere Dashboards go to: https://grafana.com/grafana/dashboards/8159-vmware-vsphere-overview/
+         - VMware vSphere - Overview -> ID 8159
+         - VMware vSphere - VMs -> ID 8168
+         - VMware vSphere - Hosts -> ID 8165
+         - VMware vSphere - Datastore -> ID 8162
