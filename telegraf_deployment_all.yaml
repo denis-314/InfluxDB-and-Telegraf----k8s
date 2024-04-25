@@ -1,0 +1,119 @@
+# Namespace
+# telegraf_namespace.yaml
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: telegraf-ns
+---
+
+
+# # Telegraf Secret
+# # telegraf_secret.yaml
+
+# apiVersion: v1
+# kind: Secret
+# metadata:
+  # name: telegraf-secrets
+  # namespace: telegraf-ns
+# type: Opaque
+# stringData:
+  # #INFLUXDB_DB: eta
+  # INFLUXDB_URL: http://10.40.0.132:30015
+  # INFLUXDB_USER: denis
+  # INFLUXDB_USER_PASSWORD: Parola123.#
+  # INFLUXDB_BUCKET: eta
+  # INFLUXDB_ORGANIZATION: eta
+  # INFLUXDB_TOKEN: uUeleZTGA_1kLfSLSmRHzyl9LFHYtkfg-EiBcvmlBhxLh94vPgtTO0_CyNPe6sZoSn0Oyx74pG5Qy5iIPmmm_w==
+---
+
+
+# Telegraf Config
+# kubectl apply -f telegraf_configmap.yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: telegraf-config
+  namespace: telegraf-ns
+data:
+  telegraf.conf: |+
+    ## Input <- vSphere
+    ## Realtime instance
+    [[inputs.vsphere]]
+    interval = "20s"
+      vcenters = [ "https://10.40.0.5/sdk" ]
+      username = "dpiroi@eta2u.demo"
+      password = "<password>"
+    vm_metric_include = []
+    host_metric_include = []
+    cluster_metric_exclude = [""]
+    datastore_metric_exclude = [""]
+    max_query_metrics = 256
+    timeout = "60s"
+    insecure_skip_verify = true
+    ## Output -> InfluxDB
+    [[outputs.influxdb_v2]]
+      urls = ["http://10.40.0.132:30015"]
+      token = "uUeleZTGA_1kLfSLSmRHzyl9LFHYtkfg-EiBcvmlBhxLh94vPgtTO0_CyNPe6sZoSn0Oyx74pG5Qy5iIPmmm_w=="
+      organization = "eta"
+      bucket = "eta"
+---
+
+
+# Telegraf Deployment
+# telegraf_deployment.yaml
+# kubectl apply -f telegraf_deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: telegraf-ns
+  name: telegraf
+spec:
+  selector:
+    matchLabels:
+      app: telegraf
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: telegraf
+    spec:
+      containers:
+        - image: telegraf:latest
+          name: telegraf
+          # envFrom:
+            # - secretRef:
+                # name: telegraf-secrets
+          volumeMounts:
+            - name: telegraf-config-volume
+              mountPath: /etc/telegraf/telegraf.conf
+              subPath: telegraf.conf
+              readOnly: true
+      volumes:
+        - name: telegraf-config-volume
+          configMap:
+            name: telegraf-config
+---
+
+
+# # Service
+
+# apiVersion: v1
+# kind: Service
+# metadata:
+  # namespace: telegraf-ns
+  # name: telegraf
+  # labels:
+    # app: telegraf
+# spec:
+  # selector:
+    # app: telegraf
+  # type: NodePort
+  # ports:
+    # - protocol: TCP
+      # port: 8125
+      # targetPort: 8125
+      # nodePort: 30016
+# ---
