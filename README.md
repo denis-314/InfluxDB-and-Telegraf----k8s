@@ -6,7 +6,7 @@ PREREQUISITES:
     2. Copy the above YAML file on a local directory
     2. Open communication on ports 30015 on the Router (or other ports, but they need to be changed in the serice).
 
-DEPLOYMENT STEPS -- INFLUXDB:
+DEPLOYMENT STEPS -- INFLUXDB --:
 
   1. Create the local directory used for persistent volumes on all Kubernetes nodes
 
@@ -26,7 +26,7 @@ DEPLOYMENT STEPS -- INFLUXDB:
   4. Acces InfluxDB web UI on port 30015 in browser
 
 
-DEPLOYMENT STEPS -- TELEGRAF:
+DEPLOYMENT STEPS -- TELEGRAF --:
 
   1. Create the local directory for the yaml files
 
