@@ -6,9 +6,9 @@ PREREQUISITES:
     2. Copy the above YAML file on a local directory
     2. Open communication on ports 30015 on the Router (or other ports, but they need to be changed in the serice).
 
-DEPLOYMENT STEPS:
+DEPLOYMENT STEPS INFLUXDB:
 
-  l. Create the local directory used for persistent volumes on all Kubernetes nodes
+  1. Create the local directory used for persistent volumes on all Kubernetes nodes
 
     cd /home/kube
     mkdir influxdb-files
@@ -24,6 +24,19 @@ DEPLOYMENT STEPS:
     kubectl apply -f influxdb-deployment.yaml
 
   4. Acces InfluxDB web UI on port 30015 in browser
+
+
+DEPLOYMENT STEPS Telegraf:
+
+  1. Create the local directory for the yaml files
+
+    cd /home/kube
+    mkdir telegraf-files
+    cd telegraf-files
+    
+  2. Create the Telegraf Deployment
+     
+    kubectl apply -f telegraf_deployment_all.yaml
 
 Bibliography:
   - https://opensource.com/article/19/2/deploy-influxdb-grafana-kubernetes
