@@ -44,7 +44,7 @@ DEPLOYMENT STEPS -- TELEGRAF --
     kubectl apply -f telegraf_deployment_all.yaml
   
   3. For vSphere Dashboards go to: https://grafana.com/grafana/dashboards/8159-vmware-vsphere-overview/
-         - VMware vSphere - Overview -> ID 8159
-         - VMware vSphere - VMs -> ID 8168
-         - VMware vSphere - Hosts -> ID 8165
-         - VMware vSphere - Datastore -> ID 8162
+     - VMware vSphere - Overview -> ID 8159
+     - VMware vSphere - VMs -> ID 8168
+     - VMware vSphere - Hosts -> ID 8165
+     - VMware vSphere - Datastore -> ID 8162
