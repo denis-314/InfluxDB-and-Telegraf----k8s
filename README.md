@@ -15,15 +15,12 @@ DEPLOYMENT STEPS -- INFLUXDB --
     cd influxdb-files
     mkdir volume-files
     
-  2. Create the Storage Class and the Persistemt Volume
-     
-    kubectl apply -f influxdb-persistent-volume.yaml
-   
+  2. Edit the Persistent Volume section inside influxdb_deployment_all.yaml to reflect the path to the folder defined at step. 1
   3. Create the InfluxDB Deployment
 
-    kubectl apply -f influxdb-deployment.yaml
+    kubectl apply -f influxdb_deployment_all.yaml
 
-  4. Acces InfluxDB web UI on port 30015 in browser
+  3. Acces InfluxDB web UI on port 30015 in browser
 
 Bibliography:
   - https://opensource.com/article/19/2/deploy-influxdb-grafana-kubernetes
@@ -38,8 +35,9 @@ DEPLOYMENT STEPS -- TELEGRAF --
     cd /home/kube
     mkdir telegraf-files
     cd telegraf-files
-    
-  2. Create the Telegraf Deployment
+
+  2. Edit the ConfigMap section inside telegraf_deployment_all.yaml to reflect the correct address and credentials of vCenter and InfluxDB
+  3. Create the Telegraf Deployment
      
     kubectl apply -f telegraf_deployment_all.yaml
   
