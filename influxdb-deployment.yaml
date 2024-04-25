@@ -6,6 +6,56 @@ metadata:
   name: influxdb-ns
 ---
 
+
+# Storage Class
+
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+
+metadata:
+  labels:
+    app: influxdb
+  name: influxdb-sc
+  namespace: influxdb-ns
+
+provisioner: k8s.io/minikube-hostpath
+volumeBindingMode: Immediate
+
+parameters:
+ type: gp2 # This configures SSDs
+
+allowVolumeExpansion: true
+reclaimPolicy: Retain
+---
+
+
+# PV
+
+apiVersion: v1
+kind: PersistentVolume
+
+metadata:
+  labels:
+    app: influxdb
+  name: influxdb-pv
+  namespace: influxdb-ns
+  labels:
+    type: local
+
+spec:
+  storageClassName: influxdb-sc
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: "/home/kube/influxdb-files/volume-files"
+---
+
+
+#Deployment
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -59,6 +109,10 @@ spec:
         persistentVolumeClaim:
           claimName: influxdb-pvc
 ---
+
+
+# PVC
+
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -74,6 +128,9 @@ spec:
     requests:
       storage: 2Gi
 ---
+
+
+# Service
 
 apiVersion: v1
 kind: Service
