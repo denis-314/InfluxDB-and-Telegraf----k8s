@@ -1,5 +1,4 @@
 # Namespace
-# telegraf_namespace.yaml
 
 apiVersion: v1
 kind: Namespace
@@ -8,28 +7,27 @@ metadata:
 ---
 
 
-# # Telegraf Secret
-# # telegraf_secret.yaml
+# Secret
 
-# apiVersion: v1
-# kind: Secret
-# metadata:
-  # name: telegraf-secrets
-  # namespace: telegraf-ns
-# type: Opaque
-# stringData:
-  # #INFLUXDB_DB: eta
-  # INFLUXDB_URL: http://10.40.0.132:30015
-  # INFLUXDB_USER: denis
-  # INFLUXDB_USER_PASSWORD: Parola123.#
-  # INFLUXDB_BUCKET: eta
-  # INFLUXDB_ORGANIZATION: eta
-  # INFLUXDB_TOKEN: uUeleZTGA_1kLfSLSmRHzyl9LFHYtkfg-EiBcvmlBhxLh94vPgtTO0_CyNPe6sZoSn0Oyx74pG5Qy5iIPmmm_w==
+apiVersion: v1
+kind: Secret
+metadata:
+  name: telegraf-secrets
+  namespace: telegraf-ns
+type: Opaque
+stringData:
+  INFLUXDB_URL: http://10.40.0.132:30015
+  INFLUXDB_BUCKET: eta
+  INFLUXDB_ORGANIZATION: eta
+  INFLUXDB_TOKEN: uUeleZTGA_1kLfSLSmRHzyl9LFHYtkfg-EiBcvmlBhxLh94vPgtTO0_CyNPe6sZoSn0Oyx74pG5Qy5iIPmmm_w==
+  VCENTER_URL: https://10.40.0.5/sdk
+  VCENTER_USERNAME: dpiroi@eta2u.demo
+  VCENTER_PASSWORD: <password>
+
 ---
 
 
-# Telegraf Config
-# kubectl apply -f telegraf_configmap.yaml
+# ConfigMap
 
 apiVersion: v1
 kind: ConfigMap
@@ -42,9 +40,9 @@ data:
     ## Realtime instance
     [[inputs.vsphere]]
     interval = "20s"
-      vcenters = [ "https://10.40.0.5/sdk" ]
-      username = "dpiroi@eta2u.demo"
-      password = "<password>"
+      vcenters = ["$VCENTER_URL"]
+      username = "$VCENTER_USERNAME"
+      password = "$VCENTER_PASSWORD"
     vm_metric_include = []
     host_metric_include = []
     cluster_metric_exclude = [""]
@@ -52,18 +50,31 @@ data:
     max_query_metrics = 256
     timeout = "60s"
     insecure_skip_verify = true
+    ## Historical instance
+    [[inputs.vsphere]]
+    interval = "300s"
+      vcenters = ["$VCENTER_URL"]
+      username = "$VCENTER_USERNAME"
+      password = "$VCENTER_PASSWORD"
+    datastore_metric_include = [ "disk.capacity.latest", "disk.used.latest", "disk.provisioned.latest"]
+    insecure_skip_verify = true
+    force_discover_on_init = true
+    cluster_metric_include = [""]
+    datacenter_metric_include = [""]
+    host_metric_exclude = [""] # Exclude realtime metrics
+    vm_metric_exclude = [""] # Exclude realtime metrics
+    max_query_metrics = 256
+    collect_concurrency = 3
     ## Output -> InfluxDB
     [[outputs.influxdb_v2]]
-      urls = ["http://10.40.0.132:30015"]
-      token = "uUeleZTGA_1kLfSLSmRHzyl9LFHYtkfg-EiBcvmlBhxLh94vPgtTO0_CyNPe6sZoSn0Oyx74pG5Qy5iIPmmm_w=="
-      organization = "eta"
-      bucket = "eta"
+      urls = ["$INFLUXDB_URL"]
+      token = "$INFLUXDB_TOKEN"
+      organization = "$INFLUXDB_ORGANIZATION"
+      bucket = "$INFLUXDB_BUCKET"
 ---
 
 
-# Telegraf Deployment
-# telegraf_deployment.yaml
-# kubectl apply -f telegraf_deployment.yaml
+# Deployment
 
 apiVersion: apps/v1
 kind: Deployment
@@ -83,9 +94,9 @@ spec:
       containers:
         - image: telegraf:latest
           name: telegraf
-          # envFrom:
-            # - secretRef:
-                # name: telegraf-secrets
+          envFrom:
+            - secretRef:
+                name: telegraf-secrets
           volumeMounts:
             - name: telegraf-config-volume
               mountPath: /etc/telegraf/telegraf.conf
@@ -96,24 +107,3 @@ spec:
           configMap:
             name: telegraf-config
 ---
-
-
-# # Service
-
-# apiVersion: v1
-# kind: Service
-# metadata:
-  # namespace: telegraf-ns
-  # name: telegraf
-  # labels:
-    # app: telegraf
-# spec:
-  # selector:
-    # app: telegraf
-  # type: NodePort
-  # ports:
-    # - protocol: TCP
-      # port: 8125
-      # targetPort: 8125
-      # nodePort: 30016
-# ---
