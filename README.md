@@ -40,8 +40,14 @@ DEPLOYMENT STEPS -- TELEGRAF --
   3. Create the Telegraf Deployment
      
     kubectl apply -f telegraf_deployment_all.yaml
+
+_____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+Additional information
+
+- Add new InfluxDB Data Source in Grafana: https://www.youtube.com/watch?v=Jszd7zrl-_U
   
-  3. For vSphere Dashboards go to: https://grafana.com/grafana/dashboards/8159-vmware-vsphere-overview/
+- For vSphere Dashboards go to: https://grafana.com/grafana/dashboards/8159-vmware-vsphere-overview/
      - VMware vSphere - Overview -> ID 8159
      - VMware vSphere - VMs -> ID 8168
      - VMware vSphere - Hosts -> ID 8165
